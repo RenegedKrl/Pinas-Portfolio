@@ -266,6 +266,7 @@ const words = 'Seu negócio não precisa de mais seguidores.|Precisa de pessoas 
   @keyframes bob { 50% { transform: translateY(8px); } }
 
   .stage { position: relative; width: 100%; aspect-ratio: 1; cursor: pointer; contain: size layout; } /* contain: o canvas não empurra o tamanho */
+  .stage { user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; outline: none; } /* sem seleção azul ao clicar no botão 3D */
   /* canvas maior que a área para as moedas não cortarem na borda */
   .stage :global(canvas) { position: absolute; inset: -100%; width: 300% !important; height: 300% !important; pointer-events: none; }
   .stage-hint { z-index: 1; position: absolute; top: 4%; right: 8%; font-size: 24px; color: var(--yellow); rotate: 8deg; pointer-events: none; }
