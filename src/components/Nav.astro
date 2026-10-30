@@ -1,0 +1,35 @@
+<header class="nav" data-nav>
+  <a href="/" class="logo">PINAS<span class="red">●</span><small>studio</small></a>
+  <nav aria-label="Principal">
+    <a href="/#servicos">Serviços</a>
+    <a href="/#trabalhos">Trabalhos</a>
+    <a href="/#metodo">Método</a>
+    <a href="/#sobre">Sobre</a>
+  </nav>
+  <a href="/questionario" class="btn" data-magnetic><span>Diagnóstico grátis</span></a>
+</header>
+<style>
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    width: 100%; margin: 0 auto; padding: 14px var(--gutter); color: var(--paper);
+    border: 3px solid transparent; border-radius: 0;
+    transition: width .6s cubic-bezier(.7,0,.2,1), top .6s cubic-bezier(.7,0,.2,1), padding .6s, border-radius .6s, background .4s, color .4s, box-shadow .4s, border-color .4s;
+  }
+  /* depois da hero: pílula centralizada e menor */
+  .nav.pill {
+    top: 12px; width: min(860px, calc(100% - 24px)); padding: 8px 8px 8px 22px;
+    background: var(--paper); color: var(--black); border-color: var(--black);
+    border-radius: 999px; box-shadow: 4px 4px 0 var(--black);
+  }
+  .nav.pill .logo { font-size: 20px; }
+  .nav.pill nav { gap: 22px; font-size: 15px; }
+  .nav.pill .btn { min-height: 42px; padding: 0 20px; font-size: 14px; }
+  .logo, nav, .btn { transition: font-size .6s, gap .6s, min-height .6s, padding .6s; }
+  .logo { font: 800 24px/1 var(--f-display); text-decoration: none; }
+  .logo small { font-size: 14px; opacity: .7; }
+  nav { display: flex; gap: 28px; }
+  nav a { text-decoration: none; font-weight: 600; }
+  nav a:hover { color: var(--red); }
+  @media (max-width: 760px) { nav { display: none; } .btn { min-height: 44px; padding: 0 18px; font-size: 14px; } }
+</style>

@@ -1,0 +1,129 @@
+---
+// Conteúdo da "janela" de um projeto (usado no modal e na página própria)
+import type { CollectionEntry } from 'astro:content';
+interface Props { p: CollectionEntry<'projetos'> }
+const { p } = Astro.props;
+const d = p.data;
+const host = d.link ? new URL(d.link).host : `pinas.studio/projetos/${p.id}`;
+---
+<article class="pv" data-pv>
+  <div class="bar"><i></i><i></i><i></i><span>{host}</span></div>
+  <div class="body">
+    <div class="media">
+    <div class="screen" data-frame="desktop">
+      {d.link
+        ? <iframe src={d.link} title={`Site ${d.titulo}`} loading="lazy"></iframe>
+        : d.capa ? <img src={d.capa} alt={d.titulo} /> : <div class="ph">print do site</div>}
+    </div>
+    <div class="toggle">
+        <button type="button" data-mode="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" data-mode="mobile" aria-pressed="false">Mobile</button>
+    </div>
+    </div>
+    <div class="info">
+      <h2>{d.titulo}</h2>
+      <p class="tag">{d.nicho} · {d.ano}</p>
+      <p class="tag">{d.categoria.join(' + ')}</p>
+      <h3>Como foi feito</h3>
+      <p>{d.descricao}</p>
+      {d.resultado && <p class="res">Resultado: <b>{d.resultado}</b></p>}
+    </div>
+  </div>
+  {d.galeria.length > 0 && (
+    <div class="gal">
+      <h3>Seções do site</h3>
+      <p class="gal-hint">toca numa seção pra ampliar</p>
+      <div class="gal-grid">
+        {d.galeria.map((g) => (
+          <button type="button" class="shot" data-shot>
+            <img src={g.src} alt={`${d.titulo}: ${g.legenda}`} loading="lazy" width="800" height="499" />
+            <span>{g.legenda}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )}
+  {d.etapas.length > 0 && (
+    <div class="plan">
+      <h3>Como foi planejado</h3>
+      <ol>
+        {d.etapas.map((e, i) => (
+          <li><span>{i + 1}</span><b>{e.titulo}</b><p>{e.texto}</p>{e.imagem && <img src={e.imagem} alt="" loading="lazy" />}</li>
+        ))}
+      </ol>
+    </div>
+  )}
+  <div class="actions">
+    {d.link && <a class="btn ghost" href={d.link} target="_blank" rel="noopener"><span>Visitar site</span></a>}
+    <a class="btn" href="/questionario"><span>Quero um assim</span></a>
+  </div>
+</article>
+<style>
+  .pv { background: var(--paper); color: var(--black); border: var(--stroke); border-radius: 18px; overflow: clip; box-shadow: var(--shadow); } /* clip não quebra a barra sticky */
+  .bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: var(--stroke); background: var(--white); }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; background: var(--red); border: 2px solid var(--black); }
+  .bar i:nth-child(2) { background: var(--yellow); } .bar i:nth-child(3) { background: #3ccf5b; }
+  .bar span { margin-left: 12px; font-size: 14px; opacity: .6; }
+  .body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; padding: 24px; }
+  .screen { position: relative; border: var(--stroke); border-radius: 12px; overflow: hidden; height: 440px; margin: 0 auto; width: 100%; transition: width .4s; background: #ddd; }
+  .screen[data-frame='mobile'] { width: 300px; border-radius: 28px; border-width: 8px; }
+  .screen img { width: 100%; height: 100%; border: 0; object-fit: cover; object-position: top; }
+  /* iframe renderizado na largura real (1280 ou 390) e reduzido em escala */
+  .screen iframe { border: 0; width: var(--vw, 1280px); height: calc(100% / var(--s, 1)); transform: scale(var(--s, 1)); transform-origin: 0 0; }
+  .ph { height: 100%; display: grid; place-items: center; background: repeating-linear-gradient(45deg, #eee 0 12px, #e2ddd5 12px 24px); }
+  .media { display: grid; gap: 12px; justify-items: center; min-width: 0; }
+  .toggle { display: flex; background: var(--black); border-radius: 99px; padding: 4px; }
+  .toggle button { all: unset; cursor: pointer; padding: 8px 14px; border-radius: 99px; color: var(--paper); font-size: 13px; font-weight: 700; }
+  .toggle button[aria-pressed='true'] { background: var(--red); }
+  .info h2 { font-size: clamp(36px, 4vw, 56px); }
+  .tag { margin: 6px 0; font-weight: 600; opacity: .7; }
+  .info h3, .plan h3 { font: 800 22px var(--f-display); margin: 20px 0 6px; }
+  .res b { color: var(--red); }
+  .gal { padding: 0 24px 8px; }
+  .gal-hint { margin: 0 0 12px; font-family: var(--f-hand); font-size: 20px; color: var(--red); }
+  .gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .shot { all: unset; cursor: zoom-in; display: grid; border: var(--stroke); border-radius: 12px; overflow: hidden; background: var(--white); transition: transform .2s, box-shadow .2s; }
+  .shot:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--black); }
+  .shot img { width: 100%; height: auto; aspect-ratio: 800 / 499; object-fit: cover; object-position: top; }
+  .shot span { padding: 10px 12px; border-top: var(--stroke); font-size: 14px; font-weight: 700; }
+  .shot.big { grid-column: 1 / -1; cursor: zoom-out; } /* ampliada ocupa a linha toda */
+  .shot:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+  .plan { padding: 0 24px 8px; }
+  .plan ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .plan li { border: var(--stroke); border-radius: 12px; padding: 14px; background: var(--white); }
+  .plan li span { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--red); color: var(--white); font-weight: 800; margin-right: 6px; }
+  .plan li p { margin: 8px 0 0; font-size: 14px; opacity: .75; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; padding: 20px 24px 24px; }
+  @media (max-width: 800px) { .body { grid-template-columns: 1fr; } .screen { height: 360px; } }
+</style>
+<script>
+  // escala o iframe: o site carrega na largura real e é reduzido para caber
+  const fit = (screen: HTMLElement) => {
+    const vw = screen.dataset.frame === 'mobile' ? 390 : 1280;
+    screen.style.setProperty('--vw', `${vw}px`);
+    screen.style.setProperty('--s', String(screen.clientWidth / vw));
+  };
+  const ro = new ResizeObserver((entries) => entries.forEach((e) => fit(e.target as HTMLElement)));
+  document.querySelectorAll<HTMLElement>('.screen').forEach((s) => ro.observe(s));
+
+  // amplia/reduz print de seção (uma ampliada por vez)
+  document.addEventListener('click', (e) => {
+    const s = (e.target as HTMLElement).closest<HTMLElement>('[data-shot]');
+    if (!s) return;
+    const open = !s.classList.contains('big');
+    s.parentElement!.querySelectorAll('.big').forEach((x) => x.classList.remove('big'));
+    s.classList.toggle('big', open);
+    if (open) s.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // alterna moldura desktop/mobile
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-mode]');
+    if (!b) return;
+    const media = b.closest<HTMLElement>('.media')!;
+    const screen = media.querySelector<HTMLElement>('.screen')!;
+    screen.dataset.frame = b.dataset.mode;
+    media.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    fit(screen);
+  });
+</script>

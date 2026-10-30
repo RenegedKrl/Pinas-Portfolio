@@ -1,0 +1,62 @@
+---
+import { WHATS, INSTA, BEHANCE, LINKEDIN } from './site';
+const ano = new Date().getFullYear();
+---
+<footer class="foot">
+  <div class="cols">
+    <div class="brand">
+      <a href="/" class="logo">PINAS<span class="red">●</span><small>studio</small></a>
+      <p>Assessoria digital focada em resultado para empresas que querem crescer online.</p>
+      <a class="btn" href="/questionario"><span>Diagnóstico grátis</span></a>
+    </div>
+    <nav aria-label="Serviços">
+      <h3>Serviços</h3>
+      <a href="/#servicos">Criação de Sites</a><a href="/#servicos">Gestão de Tráfego</a><a href="/#servicos">Design e Identidade</a><a href="/#servicos">Automação</a>
+    </nav>
+    <nav aria-label="Redes">
+      <h3>Redes</h3>
+      <a href={INSTA} target="_blank" rel="noopener">Instagram</a>
+      <a href={BEHANCE} target="_blank" rel="noopener">Behance</a>
+      <a href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+    <nav aria-label="Contato">
+      <h3>Contato</h3>
+      <a href={WHATS} target="_blank" rel="noopener">WhatsApp</a>
+      <a href="/projetos">Projetos</a>
+      <span>São Paulo, SP</span>
+    </nav>
+  </div>
+  <div class="bottom">
+    <span>© {ano} PINAS.studio</span>
+    <span class="hand">feito por Kauê em SP</span>
+  </div>
+  <div class="giant" aria-hidden="true">PINAS</div>
+</footer>
+<style>
+  .foot { background: var(--black); color: var(--paper); padding: 72px var(--gutter) 0; overflow: hidden; }
+  .cols { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+  .brand p { max-width: 36ch; opacity: .7; margin: 14px 0 22px; }
+  .logo { font: 800 26px/1 var(--f-display); text-decoration: none; }
+  .logo small { font-size: 15px; opacity: .7; }
+  h3 { font: 700 13px var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin: 0 0 16px; }
+  nav { display: grid; gap: 10px; align-content: start; }
+  nav a, nav span { text-decoration: none; opacity: .8; width: fit-content; }
+  nav a:hover { color: var(--red); opacity: 1; }
+  .bottom { max-width: 1280px; margin: 56px auto 0; padding-top: 20px; border-top: 1px solid rgb(246 243 238 / .15); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; opacity: .6; }
+  .bottom .hand { font-size: 20px; }
+  .giant { font: 800 31vw/.75 var(--f-display); letter-spacing: -.05em; margin: 24px 0 -6vw; color: var(--red); text-align: center; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr 1fr; } .brand { grid-column: 1 / -1; } }
+  /* celular: tudo centralizado, cada grupo vira uma fileira de pílulas */
+  @media (max-width: 640px) {
+    .foot { padding-top: 56px; text-align: center; }
+    .cols { grid-template-columns: 1fr; gap: 0; }
+    .brand { padding-bottom: 32px; }
+    .brand p { margin: 12px auto 22px; }
+    .brand .btn { width: 100%; max-width: 320px; justify-content: center; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 22px 0; border-top: 1px solid rgb(246 243 238 / .12); }
+    nav h3 { width: 100%; margin: 0 0 6px; }
+    nav a, nav span { opacity: 1; font-size: 14px; padding: 9px 14px; border: 1.5px solid rgb(246 243 238 / .25); border-radius: 99px; }
+    nav span { border-style: dashed; opacity: .7; }
+    .bottom { margin-top: 8px; flex-direction: column; align-items: center; gap: 4px; }
+  }
+</style>

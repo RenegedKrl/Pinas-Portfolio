@@ -1,0 +1,451 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+import { WHATS, INSTA, BEHANCE, LINKEDIN } from '../components/site';
+
+const cases = (await getCollection('projetos', ({ data }) => data.publico && data.destaque))
+  .sort((a, b) => a.data.ordem - b.data.ordem)
+  .slice(0, 6);
+
+const problemas = [
+  ['Você posta e ninguém compra.', 'Conteúdo com chamada clara e anúncio levando para uma página que fecha a venda.'],
+  ['Você impulsiona e só vem curioso.', 'Campanha com público certo no Meta e no Google, medida por conversa e venda, não por curtida.'],
+  ['Seu site é bonito, mas não vende.', 'Página pensada para conversão: oferta clara, prova e um botão que leva pro WhatsApp.'],
+];
+const metodo = [
+  ['Diagnóstico', 'entendo seu negócio e seu cliente'],
+  ['Estrutura', 'site ou landing que converte'],
+  ['Tráfego', 'anúncios no Meta, Google e TikTok'],
+  ['Otimização', 'relatório semanal e ajustes'],
+  ['Venda', 'o clique virou cliente'],
+];
+// mesmos serviços do site atual (pinasstudio.netlify.app)
+const servicos = [
+  { t: 'Criação de Sites', ic: '🌐', d: 'Sites rápidos, responsivos e focados em conversão, que transformam visita em cliente.', itens: ['Landing pages de alta conversão', 'E-commerce e loja virtual', 'Sites institucionais', 'Blog e portfólio profissional'] },
+  { t: 'Gestão de Tráfego', ic: '📈', pop: true, d: 'Anúncios no Google, Meta e TikTok para o máximo retorno do investimento.', itens: ['Google Ads e YouTube Ads', 'Meta Ads (Instagram e Facebook)', 'TikTok Ads', 'Relatórios detalhados'] },
+  { t: 'Design e Identidade', ic: '🎨', d: 'Marcas memoráveis, do logo ao manual completo de identidade visual.', itens: ['Criação de logo e marca', 'Manual de identidade visual', 'UI/UX para apps e sites', 'Artes para redes sociais'] },
+  { t: 'Automação', ic: '🤖', d: 'Seu atendimento e suas vendas rodando no automático, sem perder nenhum cliente.', itens: ['Atendimento automático no WhatsApp', 'Captura de leads direto do site', 'CRM e follow-up automático', 'Lembretes de agendamento e retorno'] },
+];
+const depoimentos = [
+  ['Antes, a gente investia em anúncio e só aparecia curiosa querendo procedimento de graça. Quando eles pegaram nosso marketing, refizeram o funil inteiro. Nosso WhatsApp agora só toca com cliente de alto padrão fechando pacote.', 'Thayná', 'Fundadora de centro estético'],
+  ['No mercado pet, ou você passa credibilidade de cara, ou o cliente leva o cachorro no concorrente. Fizeram um rebranding e um site que converte, focado em quem pesquisa por urgência no Google. Triplicamos os atendimentos da clínica!', 'Talita', 'Dona de clínica veterinária'],
+  ['Vender moda na internet é uma guerra. O que eu preciso é de venda na loja. Reestruturaram nosso e-commerce e escalaram os anúncios. O ROI que a gente bateu na última coleção foi surreal.', 'Eliza', 'CEO de loja de roupas'],
+  // aprovado pelo cliente em 30/10/2026
+  ['Precisava deixar o Instagram da barbearia com mais cara de marca. O Kauê fez as artes e agora o feed tem padrão, tudo combina com o estilo da casa. Ficou bem mais profissional.', 'Quinze Barbeiro', 'Dono de barbearia'],
+];
+const faq = [
+  ['Quanto preciso investir em anúncio?', 'Depende do nicho e da região. No diagnóstico eu te passo um valor inicial realista para começar sem desperdiçar.'],
+  ['Em quanto tempo vejo resultado?', 'As primeiras conversas costumam chegar nas primeiras semanas. A otimização de verdade acontece mês a mês.'],
+  ['Tem fidelidade?', 'Não. Você fica porque está dando resultado.'],
+  ['Atende fora de SP?', 'Sim. Sou de São Paulo, mas atendo negócios de qualquer cidade pelo online.'],
+];
+// ícones dos cards de dor (traço preto, detalhe vermelho)
+const icones = [
+  '<rect x="18" y="6" width="28" height="52" rx="5"/><path d="M27 52h10"/><path class="r" d="M32 24c-3-4-9-2-8 3 1 4 8 8 8 8s7-4 8-8c1-5-5-7-8-3z"/><path class="r" d="M22 16l20 22"/>',
+  '<circle cx="27" cy="27" r="15"/><path d="M38 38l14 14"/><path class="r" d="M23 23c0-5 9-5 9 0 0 3-5 3-5 7M27 34v1"/>',
+  '<rect x="6" y="10" width="52" height="38" rx="4"/><path d="M6 20h52M22 56h20M32 48v8"/><path class="r" d="M24 30h4l3 9h8l3-7H30M26 38l12-8"/>',
+];
+const words = 'Seu negócio não precisa de mais seguidores.|Precisa de pessoas certas|chegando no lugar certo|e comprando.|Eu cuido disso.'.split('|');
+---
+<Base>
+  <!-- 0. Preloader -->
+  <div class="preloader" data-preloader aria-hidden="true">
+    <div class="pl-logo">PINAS<span class="red">●</span></div>
+    <p class="hand">carregando cliques… <span data-pl-count>0</span>%</p>
+  </div>
+
+  <!-- 2. Hero · Atenção -->
+  <section class="section dark hero" id="topo">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="hand hi">oi, eu sou o Kauê ✍</p>
+        <h1 class="h-xl" data-split>
+          <span class="line">Sites que</span>
+          <span class="line"><span class="sticker">vendem.</span></span>
+          <span class="line">Tráfego que</span>
+          <span class="line red">converte.</span>
+        </h1>
+        <p class="lead">Assessoria digital em SP para negócios que querem vender mais online.</p>
+        <div class="ctas">
+          <a href="/questionario" class="btn" data-magnetic><span>Quero meu diagnóstico</span></a>
+          <a href="#trabalhos" class="btn ghost"><span>ver trabalhos ↓</span></a>
+        </div>
+        <ul class="seals">
+          <li>✓ Entrega em até 48h</li><li>✓ Garantia de satisfação</li><li>✓ Pagamento facilitado</li>
+        </ul>
+      </div>
+      <div class="stage" data-hero3d aria-hidden="true"><span class="hand stage-hint">clica aqui ↓</span></div>
+    </div>
+    <p class="hand scroll-hint">role ↓</p>
+  </section>
+
+  <!-- 3. Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" data-marquee>
+      {Array.from({ length: 6 }).map(() => (
+        <span>★ META ADS ★ GOOGLE ADS ★ LANDING PAGES ★ TIKTOK ADS ★ SEO ★ SITES ★ DESIGN&nbsp;</span>
+      ))}
+    </div>
+  </div>
+
+  <!-- 3b. Logos de clientes (mesmos do site atual) -->
+  <section class="logos" aria-label="Empresas que já confiaram">
+    <p>Empresas que já confiaram no meu trabalho</p>
+    <div class="logo-row">
+      {[['quinze-barbeiro','Quinze Barbeiro'],['pink-luxo','Pink Luxo'],['bemzanza','Bem Zanza'],['petiva','Petiva']].map(([f,n]) => <img src={`/logos/${f}.png`} alt={n} width="120" height="120" loading="lazy" />)}
+    </div>
+  </section>
+
+  <!-- 4. Manifesto · Interesse -->
+  <section class="section light manifesto" >
+    <p class="wrap manifesto-text" data-reveal-words>
+      {words.map((l, i) => <span class="mline" style={`--w:${100 - i * 12}%`}>{l.split(' ').map((w) => <span class="w">{w} </span>)}</span>)}
+    </p>
+  </section>
+
+  <!-- 5. Problema → solução -->
+  <section class="section light problems">
+    <div class="wrap">
+      <h2 class="h-lg">Soa <span class="red">familiar?</span></h2>
+      <p class="hand note">passa o mouse ou toca no card →</p>
+      <div class="stack">
+        {problemas.map(([p, s], i) => (
+          <button class="flip" style={`--r:${(i - 1) * 2}deg`} data-flip>
+            <span class="face front card">
+              <span class="wm" aria-hidden="true">0{i + 1}</span>
+              <svg class="ico" viewBox="0 0 64 64" aria-hidden="true" set:html={icones[i]} />
+              <span class="pain">{p}</span>
+              <small class="peek">ver a saída ↻</small>
+            </span>
+            <span class="face back card"><b>Com a PINAS</b>{s}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Carrossel 3D · Prova -->
+  <section class="section dark works" id="trabalhos" data-carousel-section>
+    <div class="wrap works-head">
+      <h2 class="h-lg">Trabalhos<span class="red">.</span></h2>
+      <a href="/projetos" class="btn ghost"><span>ver todos</span></a>
+    </div>
+    <div class="carousel" data-carousel>
+      <div class="ring" data-ring style={`--n:${cases.length}`}>
+        {cases.map((c, i) => (
+          <a href={`/projetos/${c.id}`} class="slide card" style={`--i:${i}`} data-slide data-cursor="VER">
+            <div class="slide-img">{c.data.capa ? <img src={c.data.capa} alt={c.data.titulo} loading="lazy" /> : <span>{c.data.titulo}</span>}</div>
+            <div class="slide-info"><b>{c.data.titulo}</b><small>{c.data.nicho} · {c.data.categoria.join(' + ')}</small></div>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="wrap works-foot">
+      <span data-counter>01</span> / {String(cases.length).padStart(2, '0')}
+      <div class="bar"><i data-bar></i></div>
+      <span class="hand">arraste →</span>
+    </div>
+  </section>
+
+  <!-- 7. Números -->
+  <section class="section dark numbers">
+    <div class="wrap nums">
+      <div><b data-count="48" data-suffix="h">48h</b><span>para entregar seu site</span></div>
+      <div><b data-count="3" data-suffix="x">3x</b><span>mais atendimentos</span></div>
+      <div><b data-count="4">4</b><span>nichos atendidos</span></div>
+    </div>
+  </section>
+
+  <!-- 8. Método · Desejo -->
+  <section class="section light method" id="metodo">
+    <div class="wrap">
+      <h2 class="h-lg">O caminho do <span class="sticker">clique</span><br />até a venda</h2>
+      <ol class="steps">
+        {metodo.map(([t, d], i) => (
+          <li style={`--i:${i}`} data-step><span class="num">{i + 1}</span><div><b>{t}</b><p>{d}</p></div></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 9. Serviços -->
+  <section class="section light services" id="servicos">
+    <div class="wrap">
+      <h2 class="h-lg">Tudo pra sua empresa <span class="red">crescer online</span></h2>
+      <p class="lead svc-lead">Assessoria completa. Do primeiro clique à primeira venda, eu cuido de tudo.</p>
+      <div class="svc-grid">
+        {servicos.map((s, i) => (
+          <article class="card svc">
+            {s.pop && <span class="pop">Mais pedido</span>}
+            <small class="idx">0{i + 1}</small>
+            <span class="ic" aria-hidden="true">{s.ic}</span><h3>{s.t}</h3><p>{s.d}</p>
+            <ul>{s.itens.map((it) => <li>{it}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Sobre -->
+  <section class="section dark about" id="sobre">
+    <div class="wrap about-grid">
+      <div class="photo" data-spin>
+        <img class="photo-img" src="/kaue.webp" alt="Kauê, fundador da PINAS.studio" width="1080" height="1350" loading="lazy" />
+        <span class="hand tag">esse sou eu</span>
+      </div>
+      <div>
+        <h2 class="h-lg">Não sou uma agência <span class="outline">gigante.</span></h2>
+        <p class="lead">Sou eu, cuidando do seu anúncio como se fosse meu. Atendimento direto, sem intermediário e sem enrolação.</p>
+        <p class="meta">São Paulo · Meta &amp; Google Ads</p>
+        <div class="socials">
+          <a class="btn white" href={INSTA} target="_blank" rel="noopener"><span>Instagram ↗</span></a>
+          <a class="btn white" href={BEHANCE} target="_blank" rel="noopener"><span>Behance ↗</span></a>
+          {LINKEDIN && <a class="btn white" href={LINKEDIN} target="_blank" rel="noopener"><span>LinkedIn ↗</span></a>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Depoimentos -->
+  <section class="section light testi">
+    <div class="wrap">
+      <h2 class="h-lg">Quem já <span class="red">confiou</span></h2>
+      <p class="hand swipe">arrasta pro lado →</p>
+      <div class="chats" data-drag-x data-chats>
+        {depoimentos.map(([q, n, r]) => (
+          <figure class="chat card"><span class="stars" aria-label="5 estrelas">★★★★★</span><blockquote>{q}</blockquote><figcaption><b>{n}</b> · {r}</figcaption></figure>
+        ))}
+      </div>
+      <div class="dots" aria-hidden="true">{depoimentos.map((_, i) => <i class={i === 0 ? 'on' : ''}></i>)}</div>
+    </div>
+  </section>
+
+  <!-- 12. FAQ -->
+  <section class="section light faq">
+    <div class="wrap">
+      <h2 class="h-lg">Perguntas <span class="red">rápidas</span></h2>
+      <div class="acc">
+        {faq.map(([q, a]) => (
+          <details class="card" name="faq"><summary>{q}</summary><p>{a}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. CTA final · Ação -->
+  <section class="section final">
+    <div class="wrap">
+      <h2 class="h-xl">Bora transformar clique em venda?</h2>
+      <a href="/questionario" class="btn white big" data-magnetic><span>Iniciar diagnóstico gratuito →</span></a>
+      <p>resposta em até 2h úteis</p>
+      <p class="alt">ou <a href={WHATS} target="_blank" rel="noopener">chama no WhatsApp ●</a> &nbsp; <a href={INSTA} target="_blank" rel="noopener">@pinas.studio</a></p>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
+
+<style>
+  /* preloader */
+  .preloader { position: fixed; inset: 0; z-index: 200; background: var(--black); display: grid; place-content: center; text-align: center; transition: opacity .5s, visibility .5s; }
+  .preloader.done { opacity: 0; visibility: hidden; }
+  .pl-logo { font: 800 clamp(56px, 12vw, 140px)/1 var(--f-display); }
+  .preloader p { font-size: 22px; opacity: .7; }
+
+  /* hero */
+  .hero { overflow-x: clip; min-height: 100svh; display: flex; align-items: center; padding-top: 120px; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: center; width: 100%; }
+  .hi { font-size: 28px; margin: 0 0 12px; transform: rotate(-3deg); color: var(--yellow); }
+  .hero-grid > div:first-child { position: relative; z-index: 2; } /* texto na frente das moedas */
+  .hero h1 { font-size: clamp(48px, 7.4vw, 124px); }
+  .hero h1 .line { display: block; white-space: nowrap; } /* cada linha inteira, sem quebrar */
+  .hero .lead { margin: 28px 0; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  .scroll-hint { position: absolute; bottom: 24px; left: 50%; translate: -50% 0; font-size: 22px; animation: bob 1.6s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(8px); } }
+
+  .stage { position: relative; width: 100%; aspect-ratio: 1; cursor: pointer; contain: size layout; } /* contain: o canvas não empurra o tamanho */
+  /* canvas maior que a área para as moedas não cortarem na borda */
+  .stage :global(canvas) { position: absolute; inset: -100%; width: 300% !important; height: 300% !important; pointer-events: none; }
+  .stage-hint { z-index: 1; position: absolute; top: 4%; right: 8%; font-size: 24px; color: var(--yellow); rotate: 8deg; pointer-events: none; }
+
+  /* marquee */
+  .marquee { background: var(--red); color: var(--white); transform: rotate(-3deg) scale(1.05); border-block: var(--stroke); overflow: hidden; margin: -20px 0; position: relative; z-index: 2; }
+  .marquee-track { display: flex; width: max-content; font: 800 clamp(22px, 3vw, 40px)/1 var(--f-display); padding: 18px 0; white-space: nowrap; }
+
+  /* logos */
+  .logos { background: var(--black); padding: 72px var(--gutter) 56px; text-align: center; }
+  .logos p { margin: 0 0 24px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; opacity: .6; }
+  .logo-row { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(20px, 5vw, 64px); }
+  .logo-row img { width: clamp(72px, 10vw, 120px); height: auto; aspect-ratio: 1; object-fit: contain; border-radius: 16px; filter: grayscale(1); opacity: .8; transition: filter .3s, opacity .3s, transform .3s; }
+  .logo-row img:hover { filter: none; opacity: 1; transform: rotate(-4deg) scale(1.08); }
+
+  /* manifesto */
+  .manifesto-text { text-align: center; font: 800 clamp(30px, 5vw, 72px)/1.05 var(--f-display); margin: 0 auto; letter-spacing: -.02em; }
+  .mline { display: block; width: var(--w); margin: 0 auto; }
+  .mline:last-child { color: var(--red); }
+  .w { opacity: .15; transition: opacity .3s; }
+  .w.on { opacity: 1; }
+
+  /* problemas */
+  .note { font-size: 24px; color: var(--red); transform: rotate(-2deg); }
+  .stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; }
+  .flip { all: unset; cursor: pointer; display: grid; perspective: 1000px; min-height: 300px; rotate: var(--r); }
+  .face { grid-area: 1 / 1; padding: 32px; display: flex; flex-direction: column; justify-content: space-between; font: 800 clamp(24px, 2.4vw, 34px)/1.1 var(--f-display); backface-visibility: hidden; transition: transform .7s cubic-bezier(.6,-.3,.3,1.4); }
+  .face b { font: 700 14px var(--f-body); color: var(--red); text-transform: uppercase; }
+  .front { position: relative; overflow: hidden; justify-content: flex-end; gap: 14px; }
+  .wm { position: absolute; top: -14px; right: 12px; font: 800 150px/1 var(--f-display); color: var(--red); opacity: .12; letter-spacing: -.05em; }
+  .ico { width: 84px; height: 84px; position: relative; margin-bottom: auto; fill: none; stroke: var(--black); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .ico :global(.r) { stroke: var(--red); }
+  .pain { color: var(--red); }
+  .peek { font: 700 13px var(--f-body); text-transform: uppercase; letter-spacing: .06em; opacity: .6; }
+  @media (hover: hover) { .flip:hover .front { transform: rotateY(-180deg); } .flip:hover .back { transform: rotateY(0); } }
+  .back { transform: rotateY(180deg); background: var(--red); color: var(--white); font-size: clamp(19px, 1.7vw, 24px); }
+  .back b { color: var(--yellow); }
+  .flip.on .front { transform: rotateY(-180deg); }
+  .flip.on .back { transform: rotateY(0); }
+
+  /* carrossel */
+  .works { overflow: hidden; }
+  .works-head, .works-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .works-foot { margin-top: 24px; font-weight: 700; }
+  .bar { flex: 1; height: 4px; background: var(--graphite); border-radius: 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--red); }
+  .carousel { height: min(62vh, 560px); perspective: 1400px; display: grid; place-items: center; margin-top: 40px; cursor: grab; touch-action: pan-y; }
+  .carousel:active { cursor: grabbing; }
+  .ring { --rad: clamp(300px, 42vw, 640px); position: relative; width: clamp(240px, 30vw, 400px); aspect-ratio: 4/5; transform-style: preserve-3d; transform: translateZ(calc(var(--rad) * -1)) rotateY(var(--rot, 0deg)); }
+  .slide { position: absolute; inset: 0; display: flex; flex-direction: column; text-decoration: none; overflow: hidden; transform: rotateY(calc(360deg / var(--n) * var(--i))) translateZ(var(--rad)); transition: filter .4s, opacity .4s; }
+  .slide:not(.active) { filter: blur(2px) brightness(.5); }
+  .slide-img { flex: 1; display: grid; place-items: center; background: repeating-linear-gradient(45deg, #eee 0 12px, #e2ddd5 12px 24px); font: 800 28px var(--f-display); }
+  .slide-img img { width: 100%; height: 100%; object-fit: cover; }
+  .slide-info { padding: 16px 20px; border-top: var(--stroke); display: grid; }
+  .slide-info small { opacity: .7; }
+
+  /* números */
+  .numbers { padding-top: 40px; }
+  .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; }
+  .nums b { display: block; font: 800 clamp(44px, 7vw, 96px)/1 var(--f-display); color: var(--red); }
+  .nums span { opacity: .75; }
+
+  /* método */
+  .steps { list-style: none; padding: 0; margin: 56px 0 0; display: grid; gap: 18px; }
+  .steps li { display: flex; align-items: center; gap: 20px; margin-left: calc(var(--i) * clamp(12px, 6vw, 90px)); opacity: .2; transform: translateX(-20px); transition: opacity .5s, transform .5s; }
+  .steps li.on { opacity: 1; transform: none; }
+  .num { flex: none; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: var(--red); color: var(--white); border: var(--stroke); box-shadow: 3px 3px 0 var(--black); font: 800 28px var(--f-display); }
+  .steps b { font: 800 clamp(24px, 3vw, 40px)/1 var(--f-display); text-transform: uppercase; }
+  .steps p { margin: 4px 0 0; opacity: .7; }
+
+  /* serviços */
+  .services { padding-top: 0; }
+  .svc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
+  .seals { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 14px; font-weight: 600; opacity: .8; }
+  .svc-lead { margin-top: 20px; }
+  .svc { position: relative; padding: 28px; transition: border-color .2s, transform .2s; }
+  .svc ul { margin: 16px 0 0; padding: 16px 0 0; border-top: 2px dashed #0002; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+  .svc li::before { content: '→ '; color: var(--red); font-weight: 700; }
+  .idx { position: absolute; top: 18px; right: 20px; font-weight: 800; opacity: .3; }
+  .pop { position: absolute; top: -14px; left: 20px; background: var(--yellow); border: 2px solid var(--black); border-radius: 99px; padding: 2px 12px; font-size: 13px; font-weight: 800; rotate: -3deg; }
+  .stars { color: var(--red); letter-spacing: 2px; }
+  .chat blockquote { margin-top: 8px; }
+  .svc:hover { border-color: var(--red); transform: translateY(-4px); }
+  .svc:hover .ic { transform: translateY(-8px) rotate(-12deg); }
+  .ic { display: inline-block; font-size: 44px; transition: transform .3s cubic-bezier(.3,1.8,.5,1); }
+  .svc h3 { font-size: 24px; margin: 16px 0 8px; }
+  .svc p { margin: 0; opacity: .75; }
+
+  /* sobre */
+  .about-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; }
+  .photo { position: relative; border: 8px solid var(--white); border-radius: 22px; box-shadow: 10px 10px 0 var(--red); rotate: -3deg; }
+  .photo { overflow: visible; max-width: 420px; width: 100%; justify-self: center; }
+  .photo-img { width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; border-radius: 14px; }
+  .tag { position: absolute; right: -20px; bottom: -24px; font-size: 30px; color: var(--yellow); rotate: 6deg; -webkit-text-stroke: 6px var(--black); paint-order: stroke fill; text-shadow: 3px 3px 0 var(--black); } /* contorno preto: legível no fundo claro */
+  .about .lead { margin: 24px 0; }
+  .meta { font-weight: 700; color: var(--red); }
+  .socials { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .socials .btn { border-color: var(--white); box-shadow: 4px 4px 0 var(--red); }
+
+  /* depoimentos */
+  /* grade: 4 colunas no desktop, 2 no tablet, rolagem lateral no celular */
+  .chats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 40px 6px 20px; }
+  .chat { margin: 0; padding: 22px; display: flex; flex-direction: column; background: #DCF8C6; border-radius: 18px 18px 18px 4px; }
+  .chat blockquote { margin: 0 0 12px; font-size: 17px; flex: 1; }
+  .chat figcaption { font-size: 14px; opacity: .6; }
+  /* dica e bolinhas: só aparecem no celular */
+  .swipe { display: none; margin: 16px 0 0; font-size: 22px; color: var(--red); rotate: -2deg; animation: nudge 1.6s ease-in-out infinite; }
+  @keyframes nudge { 50% { translate: 8px 0; } }
+  .swipe.done { animation: none; opacity: .5; }
+  .dots { display: none; justify-content: center; gap: 8px; }
+  .dots i { width: 10px; height: 10px; border-radius: 99px; border: 2px solid var(--black); transition: width .3s, background .3s; }
+  .dots i.on { width: 28px; background: var(--red); }
+  @media (max-width: 1100px) { .chats { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) {
+    .chats { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+    .chats { padding: 24px 16px 20px; margin: 0 calc(var(--gutter) * -1); scroll-padding-inline: 16px; scrollbar-width: none; }
+    .chats::-webkit-scrollbar { display: none; }
+    .chat { flex: 0 0 78vw; scroll-snap-align: start; }
+    .swipe { display: block; }
+    .dots { display: flex; }
+  }
+
+  /* faq */
+  .faq { padding-top: 0; }
+  .acc { display: grid; gap: 14px; margin-top: 40px; max-width: 860px; }
+  .acc details { padding: 0 24px; box-shadow: 4px 4px 0 var(--black); }
+  .acc summary { cursor: pointer; padding: 22px 0; font: 700 19px var(--f-body); list-style: none; display: flex; justify-content: space-between; }
+  .acc summary::after { content: '+'; color: var(--red); font-size: 28px; line-height: .8; transition: rotate .3s; }
+  .acc details[open] summary::after { rotate: 45deg; }
+  .acc p { margin: 0 0 22px; opacity: .8; }
+
+  /* cta final */
+  .final { background: var(--red); color: var(--white); text-align: center; min-height: 90svh; display: grid; place-items: center; }
+  .final h2 { max-width: 12ch; margin: 0 auto 40px; }
+  .btn.big { min-height: 72px; padding: 0 40px; font-size: 20px; }
+  .final .alt a { font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .hero-grid, .about-grid { grid-template-columns: 1fr; }
+    .stage { max-width: 340px; width: 100%; margin: 0 auto; order: -1; }
+    .stack, .svc-grid { grid-template-columns: 1fr; }
+    .svc-grid { gap: 28px; }
+    .nums { grid-template-columns: 1fr; gap: 40px; }
+    .flip { rotate: 0deg; min-height: 220px; }
+    .ring { --rad: 260px; width: 220px; }
+  }
+  /* celular: texto da hero primeiro, ritmo mais curto, nada estourando a tela */
+  @media (max-width: 640px) {
+    .section { padding-top: 64px; padding-bottom: 64px; }
+    .hero { padding-top: 96px; padding-bottom: 40px; min-height: auto; }
+    .stage { order: 0; max-width: 260px; margin-top: 8px; }
+    .stage-hint { font-size: 20px; top: 0; right: 0; }
+    .hero h1 { font-size: clamp(40px, 12.5vw, 56px); }
+    .hero .lead { margin: 20px auto; }
+    /* hero centralizada no celular */
+    .hero-grid > :first-child { text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .hero .hi { margin-inline: auto; }
+    .hero .btn { width: 100%; max-width: 320px; justify-content: center; }
+    .hero-grid > :first-child > :is(div, ul) { justify-content: center; width: 100%; }
+    /* manifesto: linhas corridas, sem a largura escalonada que quebrava palavra sozinha */
+    .manifesto-text { font-size: 30px; line-height: 1.12; }
+    .mline { width: 100%; display: inline; }
+    .mline:last-child { display: block; margin-top: 10px; }
+    .stack { gap: 16px; }
+    .flip { min-height: 180px; }
+    .face { padding: 22px; font-size: 24px; }
+    .back { font-size: 18px; }
+    .ico { width: 56px; height: 56px; }
+    .wm { font-size: 110px; }
+    .logos { padding: 48px var(--gutter) 40px; }
+    .logo-row { flex-wrap: nowrap; gap: 14px; } /* as 4 logos numa linha só */
+    .logo-row img { width: calc((100% - 42px) / 4); }
+    .works-head .btn { white-space: nowrap; min-height: 44px; padding: 0 18px; font-size: 14px; }
+    .nums { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .nums b { font-size: 40px; }
+    .nums span { font-size: 13px; display: block; line-height: 1.3; }
+    .photo { width: calc(100% - 20px); box-shadow: 6px 6px 0 var(--red); }
+    .socials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; } /* 3 redes numa linha */
+    .socials .btn { min-height: 44px; padding: 0 6px; font-size: 13px; justify-content: center; gap: 2px; }
+    .final { min-height: auto; }
+    .final .btn { font-size: 15px; padding: 0 22px; white-space: nowrap; }
+  }
+</style>

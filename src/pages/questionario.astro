@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import { WHATS } from '../components/site';
+
+// opções em cartões clicáveis
+const tempos = ['Ainda vou abrir', 'Menos de 1 ano', '1 a 3 anos', 'Mais de 3 anos'];
+const canais = ['Instagram', 'Google / Maps', 'Indicação', 'Site', 'Loja física', 'Ainda não vendo online'];
+const servicos = ['Criação de site', 'Gestão de tráfego', 'Design e identidade', 'Automação', 'Ainda não sei'];
+const dores = ['Pouca gente chegando', 'Chega gente, mas não compra', 'Não tenho site ou ele não vende', 'Já anuncio e não vejo retorno', 'Não tenho tempo pra cuidar disso'];
+const prazos = ['O quanto antes', 'Nos próximos 30 dias', 'Nos próximos 3 meses', 'Só pesquisando'];
+---
+<Base title="Diagnóstico gratuito | PINAS.studio">
+  <section class="section light q">
+    <div class="wrap">
+      <p class="hand hi">leva 2 minutos</p>
+      <h1 class="h-lg">Diagnóstico <span class="sticker">grátis</span></h1>
+      <p class="lead">Me conta sobre o seu negócio em 5 etapas rápidas. Eu olho seu site, seu Google e seus anúncios e te respondo em até 2h úteis.</p>
+
+      <!-- Netlify Forms: aparece no painel do Netlify após o deploy -->
+      <form class="card form" name="diagnostico" method="POST" data-netlify="true" netlify-honeypot="bot" action="/obrigado" data-wizard novalidate>
+        <input type="hidden" name="form-name" value="diagnostico" />
+        <p hidden><label>Não preencha <input name="bot" /></label></p>
+        <!-- resumo de todas as respostas: o Pinas Kit lê como "mensagem" do lead -->
+        <textarea name="resumo" hidden aria-hidden="true" tabindex="-1"></textarea>
+
+        <div class="progress" aria-hidden="true"><i data-bar></i></div>
+        <p class="count">Etapa <b data-step-n>1</b> de 5 · <span data-step-title>Sobre você</span></p>
+
+        <fieldset class="step" data-title="Sobre você">
+          <legend>Primeiro, quem é você?</legend>
+          <label>Seu nome<input name="nome" required autocomplete="name" /></label>
+          <label>WhatsApp<input name="whatsapp" type="tel" required autocomplete="tel" placeholder="(11) 9...." /></label>
+          <label>E-mail <small>(opcional)</small><input name="email" type="email" autocomplete="email" /></label>
+        </fieldset>
+
+        <fieldset class="step" data-title="Sua empresa" hidden>
+          <legend>Agora, sobre a empresa</legend>
+          <label>Nome da empresa<input name="empresa" required /></label>
+          <label>Nicho de atuação<input name="nicho" required placeholder="Ex.: clínica estética, pet shop, moda" /></label>
+          <div class="group" role="radiogroup" aria-label="Tempo no mercado">
+            <span class="glabel">Tempo no mercado</span>
+            <div class="chips">{tempos.map((t) => <label class="chip"><input type="radio" name="tempo" value={t} required /><span>{t}</span></label>)}</div>
+          </div>
+          <label>Cidade / bairro<input name="cidade" placeholder="Ex.: Tatuapé, São Paulo" /></label>
+        </fieldset>
+
+        <fieldset class="step" data-title="Presença hoje" hidden>
+          <legend>Como você aparece hoje?</legend>
+          <label>Site ou Instagram <small>(opcional)</small><input name="link" placeholder="@seunegocio ou seusite.com.br" /></label>
+          <div class="group">
+            <span class="glabel">De onde vêm seus clientes hoje? <small>(pode marcar mais de um)</small></span>
+            <div class="chips">{canais.map((c) => <label class="chip"><input type="checkbox" name="canais" value={c} /><span>{c}</span></label>)}</div>
+          </div>
+          <label>Principais concorrentes <small>(opcional)</small><input name="concorrentes" placeholder="nome ou @" /></label>
+        </fieldset>
+
+        <fieldset class="step" data-title="O que precisa" hidden>
+          <legend>Do que você precisa?</legend>
+          <div class="group">
+            <span class="glabel">Serviço desejado <small>(pode marcar mais de um)</small></span>
+            <div class="chips">{servicos.map((s) => <label class="chip"><input type="checkbox" name="servico" value={s} data-req-group /><span>{s}</span></label>)}</div>
+          </div>
+          <div class="group" role="radiogroup" aria-label="Maior dificuldade">
+            <span class="glabel">O que mais trava suas vendas hoje?</span>
+            <div class="chips">{dores.map((d) => <label class="chip"><input type="radio" name="dor" value={d} required /><span>{d}</span></label>)}</div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-title="Objetivos" hidden>
+          <legend>Pra fechar, seus objetivos</legend>
+          <label>O que você quer que aconteça nos próximos meses?<textarea name="objetivos" rows="4" required placeholder="Ex.: dobrar os agendamentos, lançar a loja online..."></textarea></label>
+          <div class="group" role="radiogroup" aria-label="Quando quer começar">
+            <span class="glabel">Quando quer começar?</span>
+            <div class="chips">{prazos.map((p) => <label class="chip"><input type="radio" name="prazo" value={p} required /><span>{p}</span></label>)}</div>
+          </div>
+          <p class="alt">✓ Sem compromisso ✓ Retorno em até 2h úteis ✓ 100% gratuito</p>
+        </fieldset>
+
+        <p class="err" role="alert" data-err></p>
+        <div class="nav">
+          <button class="btn ghost" type="button" data-prev hidden><span>← Voltar</span></button>
+          <button class="btn" type="button" data-next><span>Avançar →</span></button>
+          <button class="btn" type="submit" data-submit hidden><span>Quero meu diagnóstico</span></button>
+        </div>
+        <p class="alt">Prefere conversar? <a href={WHATS} target="_blank" rel="noopener">Chama no WhatsApp</a></p>
+      </form>
+    </div>
+  </section>
+</Base>
+<style>
+  .q { min-height: 100svh; padding-top: 140px; }
+  .hi { font-size: 26px; color: var(--red); rotate: -3deg; margin: 0 0 8px; }
+  .lead { margin: 24px 0 40px; }
+  .form { max-width: 680px; padding: clamp(20px, 4vw, 36px); display: grid; gap: 18px; }
+  .progress { height: 12px; border: var(--stroke); border-radius: 99px; background: var(--paper); overflow: hidden; }
+  .progress i { display: block; height: 100%; width: 20%; background: var(--red); transition: width .4s cubic-bezier(.3,1.4,.5,1); }
+  .count { margin: 0; font-size: 14px; font-weight: 600; opacity: .7; }
+  .step { border: 0; padding: 0; margin: 0; display: grid; gap: 18px; min-width: 0; }
+  .step:not([hidden]) { animation: in .4s ease; }
+  @keyframes in { from { opacity: 0; transform: translateX(24px); } }
+  legend { font: 800 clamp(24px, 3vw, 32px)/1.1 var(--f-display); padding: 0; margin-bottom: 18px; }
+  label { display: grid; gap: 6px; font-weight: 700; }
+  small { font-weight: 400; opacity: .6; }
+  textarea { padding: 12px 14px !important; resize: vertical; }
+  input:not([type='radio']):not([type='checkbox']), textarea { font: 16px var(--f-body); min-height: 50px; padding: 0 14px; border: var(--stroke); border-radius: 12px; background: var(--paper); }
+  .group { display: grid; gap: 10px; }
+  .glabel { font-weight: 700; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { display: block; cursor: pointer; }
+  .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: var(--stroke); border-radius: 99px; background: var(--paper); font-weight: 600; transition: transform .15s, box-shadow .15s, background .15s; }
+  .chip:hover span { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--black); }
+  .chip input:checked + span { background: var(--red); color: var(--white); box-shadow: 3px 3px 0 var(--black); }
+  .chip input:focus-visible + span { outline: 3px solid var(--yellow); outline-offset: 2px; }
+  .err { margin: 0; min-height: 1.2em; color: var(--red); font-weight: 700; font-size: 14px; }
+  .nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .nav [data-next], .nav [data-submit] { margin-left: auto; }
+  .alt { margin: 0; font-size: 15px; }
+</style>
+<script>
+  // formulário em etapas: valida a etapa atual antes de avançar
+  const form = document.querySelector<HTMLFormElement>('[data-wizard]')!;
+  const steps = [...form.querySelectorAll<HTMLFieldSetElement>('.step')];
+  const prev = form.querySelector<HTMLButtonElement>('[data-prev]')!;
+  const next = form.querySelector<HTMLButtonElement>('[data-next]')!;
+  const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+  const err = form.querySelector<HTMLElement>('[data-err]')!;
+  let i = 0;
+
+  const go = (n: number) => {
+    i = n;
+    steps.forEach((s, k) => (s.hidden = k !== i));
+    prev.hidden = i === 0;
+    next.hidden = i === steps.length - 1;
+    submit.hidden = i !== steps.length - 1;
+    form.querySelector<HTMLElement>('[data-bar]')!.style.width = `${((i + 1) / steps.length) * 100}%`;
+    form.querySelector('[data-step-n]')!.textContent = String(i + 1);
+    form.querySelector('[data-step-title]')!.textContent = steps[i].dataset.title!;
+    err.textContent = '';
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    steps[i].querySelector<HTMLInputElement>('input:not([type=radio]):not([type=checkbox]), textarea')?.focus({ preventScroll: true });
+  };
+
+  const valid = () => {
+    const s = steps[i];
+    for (const el of s.querySelectorAll<HTMLInputElement>('[required]')) {
+      if (el.type === 'radio') {
+        if (!s.querySelector(`input[name="${el.name}"]:checked`)) return 'Escolhe uma das opções pra continuar.';
+      } else if (!el.value.trim()) { el.focus(); return 'Preenche os campos pra continuar.'; }
+    }
+    const grp = s.querySelectorAll<HTMLInputElement>('[data-req-group]');
+    if (grp.length && ![...grp].some((c) => c.checked)) return 'Marca pelo menos um serviço.';
+    const tel = s.querySelector<HTMLInputElement>('[name=whatsapp]');
+    if (tel && tel.value.replace(/\D/g, '').length < 10) { tel.focus(); return 'Confere o WhatsApp com DDD.'; }
+    return '';
+  };
+
+  next.addEventListener('click', () => { const m = valid(); m ? (err.textContent = m) : go(i + 1); });
+  prev.addEventListener('click', () => go(i - 1));
+  // monta o resumo antes do envio (este listener roda antes do Pinas Kit, que carrega depois)
+  const resumir = () => {
+    const fd = new FormData(form);
+    const v = (k: string) => fd.getAll(k).map(String).filter(Boolean).join(', ') || '-';
+    form.resumo.value = [
+      'DIAGNÓSTICO PELO SITE',
+      `Empresa: ${v('empresa')} (${v('nicho')})`,
+      `Tempo no mercado: ${v('tempo')} · Cidade: ${v('cidade')}`,
+      `Site/Instagram: ${v('link')}`,
+      `Clientes vêm de: ${v('canais')}`,
+      `Concorrentes: ${v('concorrentes')}`,
+      `Serviço: ${v('servico')}`,
+      `Maior trava: ${v('dor')}`,
+      `Objetivos: ${v('objetivos')}`,
+      `Quando começar: ${v('prazo')}`,
+    ].join('\n');
+  };
+  // resumo sempre atualizado: o Pinas Kit pode ler antes do submit deste script
+  form.addEventListener('input', resumir);
+  form.addEventListener('change', resumir);
+  form.addEventListener('submit', (e) => { const m = valid(); if (m) { e.preventDefault(); err.textContent = m; return; } resumir(); });
+  // Enter avança em vez de enviar
+  form.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && i < steps.length - 1) { e.preventDefault(); next.click(); }
+  });
+</script>
