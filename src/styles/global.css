@@ -19,6 +19,7 @@
 [hidden] { display: none !important; } /* hidden sempre vence o display do componente */
 html { -webkit-text-size-adjust: 100%; overflow-x: clip; } /* faixa inclinada e cena 3D não geram rolagem lateral */
 a, button, [role="button"], label, summary { -webkit-tap-highlight-color: transparent; } /* tira o retângulo azul do toque no mobile */
+img, video, picture, canvas { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; } /* dificulta salvar imagens */
 body {
   margin: 0;
   font-family: var(--f-body);

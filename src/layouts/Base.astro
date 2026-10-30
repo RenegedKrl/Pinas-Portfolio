@@ -34,5 +34,10 @@ const {
     <script>
       import '../scripts/pinaskit-theme.ts';
     </script>
+    <script is:inline>
+      // bloqueia menu "salvar imagem" e arrastar mídia
+      document.addEventListener("contextmenu", e => { if (e.target.closest("img, video, picture, canvas, .project-media")) e.preventDefault(); });
+      document.addEventListener("dragstart", e => { if (e.target.closest("img, video")) e.preventDefault(); });
+    </script>
   </body>
 </html>
