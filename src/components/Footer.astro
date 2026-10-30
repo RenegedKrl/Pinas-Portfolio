@@ -5,7 +5,7 @@ const ano = new Date().getFullYear();
 <footer class="foot">
   <div class="cols">
     <div class="brand">
-      <a href="/" class="logo">PINAS<span class="red">●</span><small>studio</small></a>
+      <a href="/" class="logo">PINAS<span class="red dot">●</span><small>studio</small></a>
       <p>Assessoria digital focada em resultado para empresas que querem crescer online.</p>
       <a class="btn" href="/questionario"><span>Diagnóstico grátis</span></a>
     </div>
@@ -37,6 +37,7 @@ const ano = new Date().getFullYear();
   .cols { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
   .brand p { max-width: 36ch; opacity: .7; margin: 14px 0 22px; }
   .logo { font: 800 26px/1 var(--f-display); text-decoration: none; }
+  .dot { font-size: .45em; vertical-align: baseline; margin: 0 1px; } /* ponto pequeno, na linha do "studio" */
   .logo small { font-size: 15px; opacity: .7; }
   h3 { font: 700 13px var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin: 0 0 16px; }
   nav { display: grid; gap: 10px; align-content: start; }
