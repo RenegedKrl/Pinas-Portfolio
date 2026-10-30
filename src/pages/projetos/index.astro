@@ -7,7 +7,7 @@ import ProjectView from '../../components/ProjectView.astro';
 const projetos = (await getCollection('projetos', ({ data }) => data.publico)).sort((a, b) => a.data.ordem - b.data.ordem);
 const cats = ['Todos', 'Site', 'Landing', 'Tráfego', 'Design'];
 ---
-<Base title="Projetos | PINAS.studio">
+<Base title="Portfólio | Pinas Studio">
   <section class="section dark top">
     <div class="wrap">
       <h1 class="h-xl">Projetos <span class="red">({projetos.length})</span></h1>
