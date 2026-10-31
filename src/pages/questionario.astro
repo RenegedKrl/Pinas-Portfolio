@@ -91,7 +91,8 @@ const prazos = ['O quanto antes', 'Nos próximos 30 dias', 'Nos próximos 3 mese
   .q { min-height: 100svh; padding-top: 140px; }
   .hi { font-size: 26px; color: var(--red); rotate: -3deg; margin: 0 0 8px; }
   .lead { margin: 24px 0 40px; }
-  .form { max-width: 680px; padding: clamp(20px, 4vw, 36px); display: grid; gap: 18px; }
+  .q .wrap > .hi, .q .wrap > h1, .q .wrap > .lead { text-align: center; max-width: 680px; margin-inline: auto; }
+  .form { max-width: 680px; margin-inline: auto; padding: clamp(20px, 4vw, 36px); display: grid; gap: 18px; }
   .progress { height: 12px; border: var(--stroke); border-radius: 99px; background: var(--paper); overflow: hidden; }
   .progress i { display: block; height: 100%; width: 20%; background: var(--red); transition: width .4s cubic-bezier(.3,1.4,.5,1); }
   .count { margin: 0; font-size: 14px; font-weight: 600; opacity: .7; }
@@ -177,7 +178,21 @@ const prazos = ['O quanto antes', 'Nos próximos 30 dias', 'Nos próximos 3 mese
   // resumo sempre atualizado: o Pinas Kit pode ler antes do submit deste script
   form.addEventListener('input', resumir);
   form.addEventListener('change', resumir);
-  form.addEventListener('submit', (e) => { const m = valid(); if (m) { e.preventDefault(); err.textContent = m; return; } resumir(); });
+  // envio via fetch: o POST nativo para /obrigado dá 405 fora do Netlify (Vercel)
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const m = valid(); if (m) { err.textContent = m; return; }
+    resumir();
+    submit.disabled = true;
+    let ok = false;
+    try {
+      const r = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form) as any).toString() });
+      ok = r.ok;
+    } catch {}
+    // sem backend de formulário: manda as respostas pelo WhatsApp para não perder o lead
+    if (!ok) window.open('https://wa.me/5511934726972?text=' + encodeURIComponent(form.resumo.value), '_blank');
+    location.href = '/obrigado';
+  });
   // Enter avança em vez de enviar
   form.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && (e.target as HTMLElement).tagName === 'INPUT' && i < steps.length - 1) { e.preventDefault(); next.click(); }
