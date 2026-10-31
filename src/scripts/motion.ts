@@ -104,20 +104,59 @@ if (ring) {
     if (counter) counter.textContent = String(idx + 1).padStart(2, '0');
     if (bar) bar.style.width = `${((idx + 1) / n) * 100}%`;
   };
-  const snapTo = (r: number) => gsap.to(st, { rot: Math.round(r / step) * step, duration: .6, ease: 'power3.out', onUpdate: render });
+  let snapTween: gsap.core.Tween | null = null;
+  const snapTo = (r: number) => {
+    snapTween?.kill();
+    snapTween = gsap.to(st, { rot: Math.round(r / step) * step, duration: .6, ease: 'power3.out', onUpdate: render });
+  };
   render();
 
+  let stTrigger: ScrollTrigger | null = null;
   const mm = gsap.matchMedia();
   mm.add('(min-width: 901px) and (prefers-reduced-motion: no-preference)', () => {
-    gsap.to(st, { rot: -step * (n - 1), ease: 'none', onUpdate: render, scrollTrigger: { trigger: '[data-carousel-section]', pin: true, scrub: 1, start: 'top top', end: `+=${n * 60}%`, snap: 1 / (n - 1) } });
+    const tween = gsap.to(st, {
+      rot: -step * (n - 1),
+      ease: 'none',
+      onUpdate: render,
+      scrollTrigger: {
+        trigger: '[data-carousel-section]',
+        pin: true,
+        scrub: 1,
+        start: 'top top',
+        end: `+=${n * 60}%`,
+        snap: 1 / (n - 1),
+      },
+    });
+    stTrigger = tween.scrollTrigger ?? null;
+    return () => {
+      stTrigger = null;
+    };
   });
 
   // arraste (sobrepõe a posição; no desktop a rolagem retoma depois)
   const car = $('[data-carousel]')!;
   let x0 = 0, r0 = 0, drag = false, moved = false;
-  car.addEventListener('pointerdown', (e) => { drag = true; moved = false; x0 = e.clientX; r0 = st.rot; gsap.killTweensOf(st); });
+  car.addEventListener('pointerdown', (e) => {
+    drag = true;
+    moved = false;
+    x0 = e.clientX;
+    r0 = st.rot;
+    snapTween?.kill();
+  });
   addEventListener('pointermove', (e) => { if (!drag) return; const dx = e.clientX - x0; if (Math.abs(dx) > 5) moved = true; st.rot = r0 + dx * .25; render(); });
-  addEventListener('pointerup', () => { if (drag) { drag = false; snapTo(st.rot); } });
+  addEventListener('pointerup', () => {
+    if (drag) {
+      drag = false;
+      snapTo(st.rot);
+      if (stTrigger && stTrigger.isActive) {
+        const idx = ((Math.round(-st.rot / step) % n) + n) % n;
+        const targetScroll = stTrigger.start + (idx / (n - 1)) * (stTrigger.end - stTrigger.start);
+        const lenis = (window as any).lenis;
+        if (lenis) lenis.scrollTo(targetScroll, { duration: 0.6 });
+        else window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      }
+    }
+  });
   car.addEventListener('click', (e) => { if (moved) e.preventDefault(); }, true);
   // celular: gira sozinho a cada 2s enquanto está na tela; para 5s depois de um arraste
   mm.add('(max-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
@@ -144,3 +183,7 @@ if (chats) {
     $('.swipe')?.classList.add('done');
   }, { passive: true });
 }
+
+// recalcula posições após imagens e fontes carregarem
+window.addEventListener('load', () => ScrollTrigger.refresh());
+document.fonts?.ready.then(() => ScrollTrigger.refresh());
